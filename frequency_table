@@ -2,7 +2,7 @@
 if(!require("data.table")){install.packages("data.table");library("data.table")}
 if(!require("dplyr")){install.packages("dplyr");library("dplyr")}
 if(!require("lubridate")){install.packages("lubridate");library("lubridate")}
-if(!require("xlsx")){install.packages("xlsx");library("xlsx")}
+if(!require("openxlsx")){install.packages("xlsx");library("xlsx")}
 gc(); 
 rm(list=ls()); cat("\014");
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
