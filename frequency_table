@@ -9,17 +9,16 @@ setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 #### Frequency Table ####
 dataset = fread("C:/Users/Ashrith Reddy/Documents/GitHub/dressbarn_price_elasticity/code/01_Adhoc/98_ads_creation/ads1_v5.csv",nrows = -1) 
-dataset$day = substr(dataset$month,9,10)
-dataset$month = substr(dataset$month,6,7)
-dataset$year = substr(dataset$month,1,4)
 
+wb <- openxlsx::createWorkbook("frequency_table.xlsx")
 for(i in 1:ncol(dataset)){
+  openxlsx::addWorksheet(wb, names(dataset)[i]  )
   print(names(dataset)[i])
   one_columns = dataset[,i,with = FALSE]
   one_columns = one_columns[,.(Count=.N),by = c(names(dataset)[i]) ] %>% as.data.frame()
   one_columns$Percentage = 100*one_columns$Count/sum(one_columns$Count)
-  one_columns = one_columns %>% arrange(Count)
-  xlsx::write.xlsx(one_columns,"ads_frequencies.xlsx",sheetName = names(dataset)[i],append = T)
-  fwrite(one_columns,paste0(names(dataset)[i],"_frequency.csv")) 
-  rm(i,one_columns)
+  one_columns = one_columns %>% arrange(desc(Count))
+  openxlsx::writeData(wb, i, one_columns)
 }
+openxlsx::saveWorkbook(wb, file = "frequency_table.xlsx")
+rm(i,one_columns,wb)
