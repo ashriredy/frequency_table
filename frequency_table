@@ -1,0 +1,24 @@
+#### Setting Up ####
+if(!require("data.table")){install.packages("data.table");library("data.table")}
+if(!require("dplyr")){install.packages("dplyr");library("dplyr")}
+if(!require("lubridate")){install.packages("lubridate");library("lubridate")}
+if(!require("xlsx")){install.packages("xlsx");library("xlsx")}
+gc(); 
+rm(list=ls()); cat("\014");
+setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+
+#### Frequency Table ####
+dataset = fread("C:/Users/Ashrith Reddy/Documents/GitHub/dressbarn_price_elasticity/code/01_Adhoc/98_ads_creation/ads1_v5.csv",nrows = -1) 
+dataset$day = substr(dataset$month,9,10)
+dataset$month = substr(dataset$month,6,7)
+dataset$year = substr(dataset$month,1,4)
+
+for(i in 1:ncol(dataset)){
+  print(names(dataset)[i])
+  one_columns = dataset[,i,with = FALSE]
+  one_columns = one_columns[,.(Count=.N),by = c(names(dataset)[i]) ] %>% as.data.frame()
+  one_columns$Percentage = 100*one_columns$Count/sum(one_columns$Count)
+  one_columns = one_columns %>% arrange(Count)
+  xlsx::write.xlsx(one_columns,"ads_frequencies.xlsx",sheetName = names(dataset)[i],append = T)
+  fwrite(one_columns,paste0(names(dataset)[i],"_frequency.csv")) 
+}
