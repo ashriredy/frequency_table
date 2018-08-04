@@ -19,6 +19,7 @@ for(i in 1:ncol(dataset)){
   one_columns$Percentage = 100*one_columns$Count/sum(one_columns$Count)
   one_columns = one_columns %>% arrange(desc(Count)) %>% mutate(sl_no = 1:nrow(.)) %>% select(sl_no,everything())
   openxlsx::writeData(wb, i, one_columns)
+  gc()
 }
 openxlsx::saveWorkbook(wb, file = "frequency_table.xlsx")
 rm(i,one_columns,wb)
