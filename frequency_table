@@ -21,4 +21,5 @@ for(i in 1:ncol(dataset)){
   one_columns = one_columns %>% arrange(Count)
   xlsx::write.xlsx(one_columns,"ads_frequencies.xlsx",sheetName = names(dataset)[i],append = T)
   fwrite(one_columns,paste0(names(dataset)[i],"_frequency.csv")) 
+  rm(i,one_columns)
 }
