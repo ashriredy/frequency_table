@@ -12,7 +12,8 @@ dataset = fread("C:/Users/Ashrith Reddy/Documents/GitHub/dressbarn_price_elastic
 
 wb <- openxlsx::createWorkbook("frequency_table.xlsx")
 for(i in 1:ncol(dataset)){
-  openxlsx::addWorksheet(wb, names(dataset)[i]  )
+  sheetname = names(dataset)[i]
+  openxlsx::addWorksheet(wb, ifelse(nchar(sheetname)>31, paste0(substr(sheetname,1,15),substr(sheetname,nchar(sheetname)-15,nchar(sheetname)))  , sheetname))
   print(names(dataset)[i])
   one_columns = dataset[,i,with = FALSE]
   one_columns = one_columns[,.(Count=.N),by = c(names(dataset)[i]) ] %>% as.data.frame()
