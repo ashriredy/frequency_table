@@ -12,6 +12,8 @@ rm(list=ls()); cat("\014");
 dataset = fread("C:/Users/Ashrith Reddy/Desktop/justice/02_data/01_pos/updated_point_of_sale_01242018.csv",nrows = -1) %>% 
   select(-HOUSEHOLD_ID, -INDIVIDUAL_ID,-TRANSACTION_ID)
 
+dataset = dataset %>% mutate_if(is.factor, as.character)
+
 #### Frequency table generation ####
 wb = openxlsx::createWorkbook("frequency_table.xlsx")     # Creating and mounting an empty excel
 for(i in 1:ncol(dataset)){                                # Loop over each column
